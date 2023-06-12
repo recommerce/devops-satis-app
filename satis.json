@@ -1,0 +1,179 @@
+{
+  "name": "recommerce/devops-satis-app",
+  "homepage": "https://live-devops-satis-app.live-internal.recommerce.cloud/",
+  "repositories": [
+    {
+      "url": "git@github.com:recommerce/misc-coding-standards.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/common-lib.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/common-logger.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/common-sale.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/common-catalog.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/common-stock.git",
+      "type": "git"
+    },
+    {
+      "url": "git@bitbucket.org:recommerce-solutions/common_bi-dashboards_app.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/buyback-priceimport.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/misc-common-sdk.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/misc-api-tools.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/misc-stdlib.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/buyback-cession-certificate.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/buyback-orders.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/buyback-logistics.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/buyback-emails.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/catalog-core.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/common-mapper.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/buyback-forward-core.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/module-affiliate.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/buyback-promotions-api-client.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/processing-stock-core.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/module-doctrine.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/module-apikey.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/module-store.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/module-accessory.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/module-sales.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/processing-shipment-client.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/buyback-pricing-client.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/module-authentication.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/buyback-order-core.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/module-apikey-decorator.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/common-kong-consumer.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/common-kong-consumer-module.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/buyback-forward-client.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/common-i18n-sync.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/common-api-auth-bundle.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/common-api-ocr-bundle.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/api-platform-versioning-bundle.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/common-batching-bundle.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/common-slsbusiness.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/asset.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/queue-manager.git",
+      "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/json-lib.git",
+      "type": "git"
+    }
+  ],
+  "require-all": true
+}
