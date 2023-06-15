@@ -24,3 +24,6 @@ phases:
       - echo Build completed on `date`
       - echo Pushing the Docker image on AWS ECR
       - docker-compose push cli
+artifacts:
+  files:
+    - '.docker/aws/Dockerecs.aws.json'
