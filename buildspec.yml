@@ -1,29 +1,28 @@
 version: 0.2
 
 env:
+  git-credential-helper: yes
   variables:
-    AWS_ACCOUNT_ID: "MUST-BE-DEFINED-IN-CODEBUILD"
-    AWS_DEFAULT_REGION: "MUST-BE-DEFINED-IN-CODEBUILD"
-    IMAGE_REPO_NAME: "MUST-BE-DEFINED-IN-CODEBUILD"
-    IMAGE_TAG: "MUST-BE-DEFINED-IN-CODEBUILD"
-
+    CODEBUILD_RESOLVED_SOURCE_VERSION: "NOT-SPECIFIED"
+    IMAGE_TAG: "NOT-SPECIFIED"
 phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
       - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
-      - echo changing variables like IMAGE_TAG to $IMAGE_TAG
-      - sed -i "s/AWS_ACCOUNT_ID/$AWS_ACCOUNT_ID/g; s/AWS_DEFAULT_REGION/$AWS_DEFAULT_REGION/g; s/IMAGE_REPO_NAME/$IMAGE_REPO_NAME/g; s/IMAGE_TAG/$IMAGE_TAG/g" .docker/aws/Dockerecs.aws.json
+      - echo changing IMAGE_TAG to $IMAGE_TAG and BUILD_NUMBER to $CODEBUILD_BUILD_NUMBER
+      - sed -i "s/IMAGE_TAG/$IMAGE_TAG/g; s/BUILD_NUMBER/$CODEBUILD_BUILD_NUMBER/g; s/AWS_REGION/$AWS_REGION/g" .docker/aws/Dockerecs.aws.json
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker-compose build cli
+      # Build args are declared in docker-compose.yml
+      - docker-compose -f docker-compose.yml build --pull
   post_build:
     commands:
       - echo Build completed on `date`
-      - echo Pushing the Docker image on AWS ECR
-      - docker-compose push cli
+      - echo Pushing the Docker image on $IMAGE_NAME:$IMAGE_TAG
+      - docker-compose -f docker-compose.yml push
 artifacts:
   files:
     - '.docker/aws/Dockerecs.aws.json'

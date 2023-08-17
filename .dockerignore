@@ -13,6 +13,5 @@
 !/LICENSE
 !/php-cli.ini
 
-!/.docker/cli/satisUpdater.sh
-!/.docker/cli/supervisor/supervisord.ini
+!/.docker/fpm/var/spool/cron/crontabs/www-data
 !/satis.json
