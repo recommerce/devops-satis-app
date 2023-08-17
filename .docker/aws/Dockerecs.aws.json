@@ -1,6 +1,14 @@
 [
     {
-        "name": "devops-satis-app-IMAGE_TAG",
+        "name": "fpm",
+        "imageUri": "AWS_ACCOUNT_ID.dkr.ecr.AWS_DEFAULT_REGION.amazonaws.com/IMAGE_REPO_NAME:IMAGE_TAG"
+    },
+    {
+        "name": "nginx",
+        "imageUri": "131826866465.dkr.ecr.eu-west-1.amazonaws.com/docker-images:nginx1.22-fpm-alpine"
+    },
+    {
+        "name": "cli",
         "imageUri": "AWS_ACCOUNT_ID.dkr.ecr.AWS_DEFAULT_REGION.amazonaws.com/IMAGE_REPO_NAME:IMAGE_TAG"
     }
 ]
