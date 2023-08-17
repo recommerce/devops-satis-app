@@ -11,7 +11,7 @@ phases:
       - echo Logging in to Amazon ECR...
       - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
       - echo changing IMAGE_TAG to $IMAGE_TAG and BUILD_NUMBER to $CODEBUILD_BUILD_NUMBER
-      - sed -i "s/IMAGE_TAG/$IMAGE_TAG/g; s/BUILD_NUMBER/$CODEBUILD_BUILD_NUMBER/g; s/AWS_REGION/$AWS_REGION/g" .docker/aws/Dockerecs.aws.json
+      - sed -i "s/IMAGE_TAG/$IMAGE_TAG/g; s/BUILD_NUMBER/$CODEBUILD_BUILD_NUMBER/g; s/AWS_REGION/$AWS_REGION/g; s/IMAGE_REPO_NAME/$IMAGE_REPO_NAME/g; s/AWS_ACCOUNT_ID/$AWS_ACCOUNT_ID/g" .docker/aws/Dockerecs.aws.json
   build:
     commands:
       - echo Build started on `date`

@@ -1,7 +1,7 @@
 [
     {
         "name": "fpm",
-        "imageUri": "AWS_ACCOUNT_ID.dkr.ecr.AWS_DEFAULT_REGION.amazonaws.com/IMAGE_REPO_NAME:IMAGE_TAG"
+        "imageUri": "AWS_ACCOUNT_ID.dkr.ecr.AWS_REGION.amazonaws.com/IMAGE_REPO_NAME:IMAGE_TAG"
     },
     {
         "name": "nginx",
@@ -9,6 +9,6 @@
     },
     {
         "name": "cli",
-        "imageUri": "AWS_ACCOUNT_ID.dkr.ecr.AWS_DEFAULT_REGION.amazonaws.com/IMAGE_REPO_NAME:IMAGE_TAG"
+        "imageUri": "AWS_ACCOUNT_ID.dkr.ecr.AWS_REGION.amazonaws.com/IMAGE_REPO_NAME:IMAGE_TAG"
     }
 ]
