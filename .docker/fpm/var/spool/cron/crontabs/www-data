@@ -1,1 +1,1 @@
-*/3 * * * * php /var/www/bin/satis build /var/www/satis.json /var/www/public/ -vvv > /var/log/satis.log
+*/10 * * * * php /var/www/bin/satis build /var/www/satis.json /var/www/public/ -vvv > /var/log/satis.log
