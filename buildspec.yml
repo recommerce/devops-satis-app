@@ -18,12 +18,12 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker-compose build cli
+      - docker-compose build fpm
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker image on AWS ECR
-      - docker-compose push cli
+      - docker-compose push fpm
 artifacts:
   files:
     - '.docker/aws/Dockerecs.aws.json'
