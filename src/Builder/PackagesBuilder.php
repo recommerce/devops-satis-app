@@ -24,15 +24,17 @@ class PackagesBuilder extends Builder
 {
     public const MINIFY_ALGORITHM_V2 = 'composer/2.0';
 
-    /** @var string packages.json file name. */
-    private $filename;
-    /** @var string included json filename template */
-    private $includeFileName;
-    /** @var array */
-    private $writtenIncludeJsons = [];
-    /** @var bool */
-    private $minify;
+    /** packages.json file name. */
+    private string $filename;
+    /** included json filename template */
+    private string $includeFileName;
+    /** @var list<mixed> */
+    private array $writtenIncludeJsons = [];
+    private bool $minify;
 
+    /**
+     * @param array<string, mixed> $config
+     */
     public function __construct(OutputInterface $output, string $outputDir, array $config, bool $skipErrors, bool $minify = false)
     {
         parent::__construct($output, $outputDir, $config, $skipErrors);
@@ -56,9 +58,9 @@ class PackagesBuilder extends Builder
 
         // Composer 1.0 format
         $repo = ['packages' => []];
-        if (isset($this->config['providers']) && $this->config['providers']) {
+        if (isset($this->config['providers']) && true === $this->config['providers']) {
             $providersUrl = 'p/%package%$%hash%.json';
-            if (!empty($this->config['homepage'])) {
+            if (isset($this->config['homepage']) && is_string($this->config['homepage'])) {
                 $repo['providers-url'] = parse_url(rtrim($this->config['homepage'], '/'), PHP_URL_PATH) . '/' . $providersUrl;
             } else {
                 $repo['providers-url'] = $providersUrl;
@@ -84,19 +86,19 @@ class PackagesBuilder extends Builder
             }
         }
 
-        if (isset($this->config['includes']) && $this->config['includes']) {
+        if (isset($this->config['includes']) && true === $this->config['includes']) {
             $repo['includes'] = $this->dumpPackageIncludeJson($packagesByName, $this->includeFileName);
         }
 
         // Composer 2.0 format
         $metadataUrl = 'p2/%package%.json';
-        if (!empty($this->config['homepage'])) {
+        if (array_key_exists('homepage', $this->config) && false !== filter_var($this->config['homepage'], FILTER_VALIDATE_URL)) {
             $repo['metadata-url'] = parse_url(rtrim($this->config['homepage'], '/'), PHP_URL_PATH) . '/' . $metadataUrl;
         } else {
             $repo['metadata-url'] = $metadataUrl;
         }
 
-        if (!empty($this->config['available-package-patterns'])) {
+        if (array_key_exists('available-package-patterns', $this->config) && count($this->config['available-package-patterns']) > 0) {
             $repo['available-package-patterns'] = $this->config['available-package-patterns'];
         } else {
             $repo['available-packages'] = array_keys($packagesByName);
@@ -141,12 +143,17 @@ class PackagesBuilder extends Builder
         $this->pruneIncludeDirectories();
     }
 
+    /**
+     * @param array<string, mixed> $packages
+     *
+     * @return array<string, mixed>
+     */
     private function findReplacements(array $packages, string $replaced): array
     {
         $replacements = [];
         foreach ($packages as $packageName => $packageConfig) {
             foreach ($packageConfig as $versionConfig) {
-                if (!empty($versionConfig['replace']) && array_key_exists($replaced, $versionConfig['replace'])) {
+                if (array_key_exists('replace', $versionConfig) && array_key_exists($replaced, $versionConfig['replace'])) {
                     $replacements[$packageName] = $packageConfig;
                     break;
                 }
@@ -176,7 +183,7 @@ class PackagesBuilder extends Builder
             foreach (new \DirectoryIterator($dirname) as $file) {
                 foreach ($entries as $entry) {
                     list($pattern, $hash) = $entry;
-                    if (preg_match($pattern, $file->getFilename(), $matches) && $matches[1] !== $hash) {
+                    if (1 === preg_match($pattern, $file->getFilename(), $matches) && $matches[1] !== $hash) {
                         $group = sprintf(
                             '%s/%s',
                             basename($dirname),
@@ -216,6 +223,16 @@ class PackagesBuilder extends Builder
         }
     }
 
+    /**
+     * @param array<string, mixed> $packages
+     * @param array<string, string> $additionalMetaData
+     *
+     * @throws \RuntimeException
+     * @throws \UnexpectedValueException
+     * @throws \Exception
+     *
+     * @return array<string, mixed>
+     */
     private function dumpPackageIncludeJson(array $packages, string $includesUrl, string $hashAlgorithm = 'sha1', array $additionalMetaData = []): array
     {
         $filename = str_replace('%hash%', 'prep', $includesUrl);
@@ -223,11 +240,12 @@ class PackagesBuilder extends Builder
 
         $repoJson = new JsonFile($path);
         $options = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES;
-        if ($this->config['pretty-print'] ?? true) {
+        $shouldPrettyPrint = isset($this->config['pretty-print']) ? (bool) $this->config['pretty-print'] : true;
+        if ($shouldPrettyPrint) {
             $options |= JSON_PRETTY_PRINT;
         }
 
-        $contents = $repoJson->encode(array_merge(['packages' => $packages], $additionalMetaData), $options) . "\n";
+        $contents = $repoJson::encode(array_merge(['packages' => $packages], $additionalMetaData), $options) . "\n";
         $hash = hash($hashAlgorithm, $contents);
 
         if (false !== strpos($includesUrl, '%hash%')) {
@@ -240,7 +258,7 @@ class PackagesBuilder extends Builder
             }
         }
 
-        if ($path) {
+        if (is_string($path)) {
             $this->writeToFile($path, $contents);
             $this->output->writeln("<info>Wrote packages to $path</info>");
         }
@@ -277,7 +295,7 @@ class PackagesBuilder extends Builder
                 file_put_contents($path, $contents);
                 break;
             } catch (\Exception $e) {
-                if ($retries) {
+                if ($retries > 0) {
                     usleep(500000);
                     continue;
                 }
@@ -288,7 +306,7 @@ class PackagesBuilder extends Builder
     }
 
     /**
-     * @param array $repo Repository information
+     * @param array<string, mixed> $repo Repository information
      */
     private function dumpPackagesJson(array $repo): void
     {
