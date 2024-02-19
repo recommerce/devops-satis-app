@@ -13,6 +13,6 @@
 !/LICENSE
 !/php-cli.ini
 
-!/.docker/cli/satisUpdater.sh
-!/.docker/cli/supervisor/supervisord.ini
+!/.docker/fpm/satisUpdater.sh
+!/.docker/fpm/supervisor/supervisord.ini
 !/satis.json
