@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   fpm:
-    image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${IMAGE_TAG}
+    image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${IMAGE_TAG}-${CODEBUILD_BUILD_NUMBER:-latest}
     build:
       context: .
       dockerfile: .docker/fpm/Dockerfile
