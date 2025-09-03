@@ -1,7 +1,7 @@
 [
     {
         "name": "nginx",
-        "imageUri": "AWS_ACCOUNT_ID.dkr.ecr.AWS_DEFAULT_REGION.amazonaws.com/docker-images:nginx1.24-alpine"
+        "imageUri": "AWS_ACCOUNT_ID.dkr.ecr.AWS_DEFAULT_REGION.amazonaws.com/docker-images:nginx1.28-alpine"
     },
     {
         "name": "fpm",

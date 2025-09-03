@@ -10,7 +10,7 @@ services:
         - AWS_REGION=${AWS_DEFAULT_REGION}
 
   nginx:
-    image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/docker-images:nginx1.24-alpine
+    image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/docker-images:nginx1.28-alpine
     ports:
       - 8080:80
     volumes_from:
