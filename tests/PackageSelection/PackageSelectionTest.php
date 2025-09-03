@@ -124,31 +124,31 @@ class PackageSelectionTest extends TestCase
         $data = [];
 
         $data['both require false'] = [
-          [],
-          $package,
-          false,
-          false,
+            [],
+            $package,
+            false,
+            false,
         ];
 
         $data['require true'] = [
-          [$link->getTarget() => $link],
-          $package,
-          true,
-          false,
+            [$link->getTarget() => $link],
+            $package,
+            true,
+            false,
         ];
 
         $data['requireDev true'] = [
-          [$devLink->getTarget() => $devLink],
-          $package,
-          false,
-          true,
+            [$devLink->getTarget() => $devLink],
+            $package,
+            false,
+            true,
         ];
 
         $data['both require true'] = [
-          [$link->getTarget() => $link, $devLink->getTarget() => $devLink],
-          $package,
-          true,
-          true,
+            [$link->getTarget() => $link, $devLink->getTarget() => $devLink],
+            $package,
+            true,
+            true,
         ];
 
         return $data;
@@ -747,7 +747,7 @@ class PackageSelectionTest extends TestCase
      * @param string[]|null $filterRepos
      * @param string[]|null $filterPackages
      */
-    public function testSelect(array $expected, array $config, array $filterRepos = null, array $filterPackages = null): void
+    public function testSelect(array $expected, array $config, ?array $filterRepos = null, ?array $filterPackages = null): void
     {
         if (null !== $filterRepos || null !== $filterPackages) {
             // Need to be able to override the default package repository class to allow testing of the filter options.
@@ -758,6 +758,141 @@ class PackageSelectionTest extends TestCase
             self::markTestIncomplete('Test cannot be completed.');
         }
 
+        unset(Config::$defaultRepositories['packagist'], Config::$defaultRepositories['packagist.org']);
+
+        $composer = (new Factory())->createComposer(new NullIO(), $config, true, null, false);
+
+        $selection = new PackageSelection(new NullOutput(), 'build', $config, false);
+        $selection->setRepositoriesFilter($filterRepos);
+        $selection->setPackagesFilter([]);
+
+        $selection->select($composer, true);
+
+        $selectionRef = new \ReflectionClass(PackageSelection::class);
+        $selected = $selectionRef->getProperty('selected');
+        $selected->setAccessible(true);
+
+        \sort($expected, \SORT_STRING);
+        self::assertEquals($expected, \array_keys($selected->getValue($selection)));
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function dataFilterRepos(): array
+    {
+        $packages = [
+            'alpha1' => [
+                'name' => 'vendor/project-alpha',
+                'version' => '1.2.3.1',
+                'source' => [
+                    'url' => 'git@github.com:vendor/project-alpha.git',
+                    'type' => 'vcs',
+                    'reference' => '1.2.3.1',
+                ],
+            ],
+            'alpha2' => [
+                'name' => 'vendor/project-alpha',
+                'version' => '1.2.3.2',
+                'source' => [
+                    'url' => 'git@github.com:vendor/project-alpha.git',
+                    'type' => 'vcs',
+                    'reference' => '1.2.3.2',
+                ],
+            ],
+            'beta1' => [
+                'name' => 'vendor/project-beta',
+                'version' => '1.2.3.1',
+                'source' => [
+                    'url' => 'git@github.com:vendor/project-beta.git',
+                    'type' => 'vcs',
+                    'reference' => '1.2.3.1',
+                ],
+            ],
+            'gamma1' => [
+                'name' => 'vendor/project-gamma',
+                'version' => '1.2.3.1',
+                'source' => [
+                    'url' => 'git@github.com:vendor/project-gamma.git',
+                    'type' => 'vcs',
+                    'reference' => '1.2.3.1',
+                ],
+            ],
+        ];
+
+        $repo = [
+            'alpha_packages' => [
+                'type' => 'package',
+                'package' => [
+                    $packages['alpha1'],
+                    $packages['alpha2'],
+                ],
+            ],
+            'beta_packages' => [
+                'type' => 'package',
+                'package' => [
+                    $packages['beta1'],
+                ],
+            ],
+            'gamma_packages' => [
+                'type' => 'package',
+                'package' => [
+                    $packages['gamma1'],
+                ],
+            ],
+        ];
+
+        foreach ($packages as &$p) {
+            $p = $p['name'] . '-' . $p['version'];
+        }
+
+        $data = [];
+
+        $data['Filter by one repository alpha'] = [
+            [
+                $packages['alpha1'],
+                $packages['alpha2'],
+            ],
+            [
+                'repositories' => array_values($repo),
+            ],
+            ['git@github.com:vendor/project-alpha.git'],
+        ];
+
+        $data['Filter by one repository beta'] = [
+            [
+                $packages['beta1'],
+            ],
+            [
+                'repositories' => array_values($repo),
+            ],
+            ['git@github.com:vendor/project-beta.git'],
+        ];
+
+        $data['Filter by two repositories'] = [
+            [
+                $packages['alpha1'],
+                $packages['alpha2'],
+                $packages['beta1'],
+            ],
+            [
+                'repositories' => array_values($repo),
+            ],
+            ['git@github.com:vendor/project-beta.git', 'git@github.com:vendor/project-alpha.git'],
+        ];
+
+        return $data;
+    }
+
+    /**
+     * @dataProvider dataFilterRepos
+     *
+     * @param string[] $expected
+     * @param array<string, mixed> $config
+     * @param string[]|null $filterRepos
+     */
+    public function testFilterRepos(array $expected, array $config, ?array $filterRepos = null): void
+    {
         unset(Config::$defaultRepositories['packagist'], Config::$defaultRepositories['packagist.org']);
 
         $composer = (new Factory())->createComposer(new NullIO(), $config, true, null, false);
@@ -1072,8 +1207,8 @@ class PackageSelectionTest extends TestCase
         $rootLink = new Link('top', 'vendor/a', $rootConstraint, Link::TYPE_REQUIRE);
 
         $config = [
-          'only-best-candidates' => true,
-          'require-dependencies' => true,
+            'only-best-candidates' => true,
+            'require-dependencies' => true,
         ];
         $builder = new PackageSelection(new NullOutput(), 'build', $config, false);
         $reflection = new \ReflectionClass(get_class($builder));
