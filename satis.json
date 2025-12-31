@@ -177,6 +177,10 @@
     {
       "url": "git@github.com:recommerce/common-laminas-i18n-sync.git",
       "type": "git"
+    },
+    {
+      "url": "git@github.com:recommerce/buyback-order-translations-lib.git",
+      "type": "git"
     }
   ],
   "require-all": true
