@@ -179,7 +179,7 @@
       "type": "git"
     },
     {            
-      "url": "git@github.com:recommerce/symfony-lock-doctrine-migrations-bundle.git"
+      "url": "git@github.com:recommerce/symfony-lock-doctrine-migrations-bundle.git",
       "type": "git"
     }
   ],
